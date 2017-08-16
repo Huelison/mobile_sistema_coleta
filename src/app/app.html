@@ -1,0 +1,21 @@
+<ion-menu [content]="content" persistent="true">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <button ion-item (click)="abrirPagina('ImportaDados')">
+        Importar Dados
+      </button>
+      <button ion-item (click)="abrirPagina('ListaRotas')">
+        Rotas
+      </button>
+      <button ion-item menuToggle>
+        Fechar Menu
+      </button>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+<ion-nav #content [root]="rootPage" ></ion-nav>
