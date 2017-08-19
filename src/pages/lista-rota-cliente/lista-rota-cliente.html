@@ -1,0 +1,36 @@
+<!--
+  Generated template for the ListaRotaClientePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>listaRotaCliente</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-padding>
+  <ion-list no-padding>
+    <ion-item no-padding *ngFor="let rotaCliente of listaRotaCliente ">
+      <ion-card no-padding>
+        <ion-card-header>
+          {{rotaCliente.nome}}
+        </ion-card-header>
+        <ion-card-content>
+          <p>
+            <ion-icon name="home">{{rotaCliente.endereco}}</ion-icon>
+          </p>
+          <ion-row>
+            <ion-col col-7>
+              <ion-icon name="call"> {{rotaCliente.fone}}</ion-icon>
+            </ion-col>
+            <ion-col col-5 text-right>
+              Ordem Coleta: {{rotaCliente.ordem}}
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+  </ion-list>
+</ion-content>

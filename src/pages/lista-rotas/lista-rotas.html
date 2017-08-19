@@ -12,8 +12,19 @@
 
 <ion-content padding>
   <ion-list>
-    <button ion-item *ngFor="let rota of listaRotas">
-    {{rota.nome}}
+    <ion-item-sliding #slidingitem *ngFor="let rota of listaRotas">
+      <ion-item>
+        {{rota.nome}}
+      </ion-item>
+    <!-- slide left items down here -->
+      <ion-item-options side='left'>
+        <button (click)='exibirClientes(rota.id)' color='primary'>Exibir Clientes</button>
+        <button (click)='iniciarColeta(rota.id)' color='primary'>Iniciar Coleta</button>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <button ion-item >
+    
   </button>
   </ion-list>
 </ion-content>

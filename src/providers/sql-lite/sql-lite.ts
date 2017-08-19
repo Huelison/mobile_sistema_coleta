@@ -13,11 +13,9 @@ import 'rxjs/add/operator/map';
 export class SqlLiteProvider {
   public banco: SQLiteObject;
   constructor(public http: Http, private sqlite: SQLite) {
-
     console.log('Hello SqlLiteProvider Provider');
   }
   abrirBanco(criar: boolean) {
-
     this.sqlite.create({
       name: 'data.db',
       location: 'default'
@@ -57,7 +55,6 @@ export class SqlLiteProvider {
       ' primary key(cliente, rota))', {})
       .then(() => console.log('Tabela rotacliente criada com sucesso!'))
       .catch(e => console.error('SQLLite: ', e));
-
 
   }
 }

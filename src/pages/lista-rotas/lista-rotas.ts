@@ -1,6 +1,7 @@
+import { RotaProvider } from './../../providers/rota/rota';
 import { SqlLiteProvider } from './../../providers/sql-lite/sql-lite';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading, MenuController } from 'ionic-angular';
 
 /**
  * Generated class for the ListaRotasPage page.
@@ -15,12 +16,33 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'lista-rotas.html',
 })
 export class ListaRotasPage {
-  listaRotas :any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public banco: SqlLiteProvider) {
-    this.banco.abrirBanco(false);
-    this.banco.banco.executeSql('Select * from rotas ',{})
+  listaRotas: any;
+  load: any;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public providerRota: RotaProvider, 
+              public menuCtrl: MenuController,public loadingCtrl: LoadingController) {
+
+  }
+
+  exibirClientes(rota) {
+    this.navCtrl.push('ListaRotaClientePage', { rotaID: rota });
+  }
+
+  iniciarColeta(Rota) {
+
+  }
+
+  ionViewDidLoad() {
+    this.carregarRotas();    
+    console.log('ionViewDidLoad ListaRotasPage');
+  }
+
+  carregarRotas() {
+    this.load = this.loadingCtrl.create({
+      content: 'Aguarde, Carregando Rotas...',
+    });
+    this.load.present();
+    this.providerRota.getAllRotas()
       .then(resp => {
-        let ls = [];
         if (resp == null) {
           return;
         }
@@ -35,11 +57,12 @@ export class ListaRotasPage {
           console.log(output);
         }
         this.listaRotas = output;
-      }).catch(Error =>{console.log(Error)});
+        this.load.dismiss();
+        this.menuCtrl.close();
+      }).catch(Error => {
+        this.load.dismiss();
+        this.menuCtrl.close();
+        console.error(Error)
+      });
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ListaRotasPage');
-  }
-
 }

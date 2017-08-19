@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { IonicApp, IonicErrorHandler, IonicModule,LoadingController } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
@@ -12,6 +12,8 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { SqlLiteProvider } from '../providers/sql-lite/sql-lite';
+import { RotaClienteProvider } from '../providers/rota-cliente/rota-cliente';
+import { RotaProvider } from '../providers/rota/rota';
   var config = {
     apiKey: "AIzaSyA-XNBTD3Q3F4EFD9qFPMdfl1pYkeYZAss",
     authDomain: "teste-92e08.firebaseapp.com",
@@ -44,7 +46,10 @@ import { SqlLiteProvider } from '../providers/sql-lite/sql-lite';
     SplashScreen,
     SQLite,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    SqlLiteProvider
+    SqlLiteProvider,
+    RotaClienteProvider,
+    RotaProvider,
+    LoadingController
   ]
 })
 export class AppModule {}
