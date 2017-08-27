@@ -14,6 +14,7 @@ export class SqlLiteProvider {
   public banco: SQLiteObject;
   constructor(public http: Http, private sqlite: SQLite) {
     console.log('Hello SqlLiteProvider Provider');
+    this.abrirBanco(true);
   }
   abrirBanco(criar: boolean) {
     this.sqlite.create({
@@ -56,5 +57,24 @@ export class SqlLiteProvider {
       .then(() => console.log('Tabela rotacliente criada com sucesso!'))
       .catch(e => console.error('SQLLite: ', e));
 
+    this.banco.executeSql('create table IF NOT EXISTS coletas( ' +
+      ' id integer primary key autoincrement,' +
+      ' rota integer not null,' +
+      ' caminhao integer not null,' +
+      ' data string not null,' +
+      ' sincronizado string not null)', {})
+      .then(() => console.log('Tabela coleta criada com sucesso!'))
+      .catch(e => console.error('SQLLite: ', e));
+
+    this.banco.executeSql('create table IF NOT EXISTS coletaCliente( ' +
+      ' cliente integer not null ,' +
+      ' coleta integer not null ,' +
+      ' quantidade double not null,' +
+      ' hora string ,' +
+      ' temperatura double ,' +
+      ' alizarol string, '+
+      ' primary key(cliente, coleta))', {})
+      .then(() => console.log('Tabela coletaCliente criada com sucesso!'))
+      .catch(e => console.error('SQLLite: ', e));
   }
 }

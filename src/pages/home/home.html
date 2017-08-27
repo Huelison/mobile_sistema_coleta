@@ -11,9 +11,36 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content no-padding>
+  <div [hidden]="!(exibeColetas)">
+    <ion-list no-padding>
+      <ion-item no-padding *ngFor="let coletaCliente of listaColetas ">
+        <ion-card no-padding>
+          <ion-card-header>
+            {{coletaCliente.nome}}
+          </ion-card-header>
+          <ion-card-content>
+            <p>
+              <ion-icon name="home">{{coletaCliente.endereco}}</ion-icon>
+            </p>
+            <ion-row>
+              <ion-col col-7 col-sm-5>
+                <ion-icon name="call"> {{coletaCliente.fone}}</ion-icon>
+              </ion-col>
+              <ion-col col-5 col-sm-3 push-sm-4 text-right [hidden]="!(coletaCliente.hora == null)">
+                Ordem Coleta: {{coletaCliente.ordem}}
+              </ion-col>
+              <ion-col col-5 col-sm-3 push-sm-4 text-right [hidden]="(coletaCliente.hora == null)">
+                Hora Coleta: {{coletaCliente.hora}}
+              </ion-col>
+              <ion-col col-5 col-sm-4 pull-sm-4 [hidden]="!(coletaCliente.hora == null)">
+                Hora Coleta: {{coletaCliente.hora}}
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-item>
+    </ion-list>
+  </div>
+
 </ion-content>

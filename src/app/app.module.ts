@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule,LoadingController } from 'ionic-angular';
+import { IonicApp, IonicErrorHandler, IonicModule,LoadingController, DateTime } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
@@ -14,6 +14,7 @@ import { HomePage } from '../pages/home/home';
 import { SqlLiteProvider } from '../providers/sql-lite/sql-lite';
 import { RotaClienteProvider } from '../providers/rota-cliente/rota-cliente';
 import { RotaProvider } from '../providers/rota/rota';
+import { ColetaProvider } from '../providers/coleta/coleta';
   var config = {
     apiKey: "AIzaSyA-XNBTD3Q3F4EFD9qFPMdfl1pYkeYZAss",
     authDomain: "teste-92e08.firebaseapp.com",
@@ -27,7 +28,6 @@ import { RotaProvider } from '../providers/rota/rota';
   declarations: [
     MyApp,
     HomePage,
-    
   ],
   imports: [
     BrowserModule,
@@ -49,7 +49,9 @@ import { RotaProvider } from '../providers/rota/rota';
     SqlLiteProvider,
     RotaClienteProvider,
     RotaProvider,
-    LoadingController
+    LoadingController,
+    ColetaProvider,
+    DateTime
   ]
 })
 export class AppModule {}
