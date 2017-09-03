@@ -12,6 +12,7 @@ export class HomePage {
   public listaColetas: any;
   public exibeColetas: boolean;
   public load: any;
+  public coleta;
   constructor(public navCtrl: NavController, public providerColeta: ColetaProvider, public banco: SqlLiteProvider, public loadingCtrl: LoadingController) {
     this.banco.abrirBanco(true);
 
@@ -24,12 +25,19 @@ export class HomePage {
   ionViewDidEnter() {
     this.carregarColetas();
   }
+
+  manterColeta(cliente:number){
+    console.log('Cliente --->'+cliente);
+    this.navCtrl.push('ManterColetasPage', { clienteID: cliente, coletaID: this.coleta });
+  }
+
   carregarColetas() {
+    this.coleta = 15
     this.load = this.loadingCtrl.create({
       content: 'Aguarde, Carregando Coletas...',
     });
     this.load.present();
-    this.providerColeta.consultaColetaCliente(15)
+    this.providerColeta.consultaColetaCliente(this.coleta,0)
       .then(resp => {
         if (resp == null) {
           return;

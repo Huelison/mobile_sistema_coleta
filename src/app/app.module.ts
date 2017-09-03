@@ -1,12 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule,LoadingController, DateTime } from 'ionic-angular';
+import { IonicApp, IonicErrorHandler, IonicModule, LoadingController, DateTime } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { HttpModule } from '@angular/http';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
-import {AngularFireModule } from 'angularfire2';
+import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 import { MyApp } from './app.component';
@@ -15,14 +15,15 @@ import { SqlLiteProvider } from '../providers/sql-lite/sql-lite';
 import { RotaClienteProvider } from '../providers/rota-cliente/rota-cliente';
 import { RotaProvider } from '../providers/rota/rota';
 import { ColetaProvider } from '../providers/coleta/coleta';
-  var config = {
-    apiKey: "AIzaSyA-XNBTD3Q3F4EFD9qFPMdfl1pYkeYZAss",
-    authDomain: "teste-92e08.firebaseapp.com",
-    databaseURL: "https://teste-92e08.firebaseio.com",
-    projectId: "teste-92e08",
-    storageBucket: "teste-92e08.appspot.com",
-    messagingSenderId: "574611796994"
-  };
+
+var config = {
+  apiKey: "AIzaSyA-XNBTD3Q3F4EFD9qFPMdfl1pYkeYZAss",
+  authDomain: "teste-92e08.firebaseapp.com",
+  databaseURL: "https://teste-92e08.firebaseio.com",
+  projectId: "teste-92e08",
+  storageBucket: "teste-92e08.appspot.com",
+  messagingSenderId: "574611796994"
+};
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import { ColetaProvider } from '../providers/coleta/coleta';
     HttpModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(config),
-	AngularFireDatabaseModule
+    AngularFireDatabaseModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -45,7 +46,7 @@ import { ColetaProvider } from '../providers/coleta/coleta';
     StatusBar,
     SplashScreen,
     SQLite,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
     SqlLiteProvider,
     RotaClienteProvider,
     RotaProvider,
@@ -54,4 +55,4 @@ import { ColetaProvider } from '../providers/coleta/coleta';
     DateTime
   ]
 })
-export class AppModule {}
+export class AppModule { }

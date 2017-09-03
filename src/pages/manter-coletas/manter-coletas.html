@@ -1,0 +1,50 @@
+<!--
+  Generated template for the ManterColetasPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>ManterColetas</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label color="primary" fixed>Quantidade</ion-label>
+      <ion-input type="number" placeholder="Informe a quantidade coletada" [(ngModel)]="data.quantidade"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary" class="dateLabel" >Hora da Coleta</ion-label>
+      <ion-input type="time" [(ngModel)]="data.hora"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary" fixed>Temperatura</ion-label>
+      <ion-input type="number" placeholder="Informe a temperatura da coleta" [(ngModel)]="data.temperatura"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Alizarol</ion-label>
+      <ion-checkbox item-end [(ngModel)]="data.alizarol"></ion-checkbox>
+    </ion-item>
+    <!--
+    <ion-item>
+      <ion-label>Hora da Coleta</ion-label>
+      <ion-datetime displayFormat="HH:mm:ss" pickerFormat="HH mm ss" ></ion-datetime>
+    </ion-item>-->
+    <ion-row>
+      <ion-buttons start>
+        <button ion-button  (click)="salvarColeta()">
+          Salvar
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+        </button>
+        <button ion-button icon-only>
+          <ion-icon name="close-circle"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-row>
+  </ion-list>
+</ion-content>

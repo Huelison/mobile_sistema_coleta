@@ -14,7 +14,7 @@
 <ion-content no-padding>
   <div [hidden]="!(exibeColetas)">
     <ion-list no-padding>
-      <ion-item no-padding *ngFor="let coletaCliente of listaColetas ">
+      <ion-item no-padding *ngFor="let coletaCliente of listaColetas " (click)="manterColeta(coletaCliente.cliente)">
         <ion-card no-padding>
           <ion-card-header>
             {{coletaCliente.nome}}
