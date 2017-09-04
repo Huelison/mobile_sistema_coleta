@@ -3,7 +3,7 @@ import { ColetaProvider } from './../../providers/coleta/coleta';
 import { RotaProvider } from './../../providers/rota/rota';
 import { SqlLiteProvider } from './../../providers/sql-lite/sql-lite';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Loading, MenuController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading, MenuController, ToastController } from 'ionic-angular';
 
 /**
  * Generated class for the ListaRotasPage page.
@@ -30,7 +30,7 @@ export class ListaRotasPage {
   load: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public providerRota: RotaProvider,
     public menuCtrl: MenuController, public loadingCtrl: LoadingController, public providerColeta: ColetaProvider,
-    public providerRotaCliente: RotaClienteProvider) {
+    public providerRotaCliente: RotaClienteProvider, public toastCtrl: ToastController) {
 
   }
 
@@ -85,6 +85,14 @@ export class ListaRotasPage {
 
                 }).catch(Error => {
                   this.load.dismiss();
+                  let toast = this.toastCtrl.create({
+                    message: 'Ocorreu um erro ao inserir os clientes na coleta.',
+                    duration: 5200,
+                    position: 'bottom',
+                    showCloseButton:true,
+                    closeButtonText:'OK'
+                  });        
+                  toast.present();  
                   console.error(Error)
                 });
             }
@@ -93,10 +101,28 @@ export class ListaRotasPage {
           this.load.dismiss();
         }).catch(Error => {
           this.load.dismiss();
+          let toast = this.toastCtrl.create({
+            message: 'Ocorreu um erro ao recuperar dados da rota selecionada.',
+            duration: 5200,
+            position: 'bottom',
+            showCloseButton:true,
+            closeButtonText:'OK'
+          });        
+          toast.present();  
           console.error(Error)
         });
       })
-      .catch(e => console.log(e));
+      .catch(e => {
+        let toast = this.toastCtrl.create({
+          message: 'Ocorreu um erro ao iniciar a coleta.',
+          duration: 5200,
+          position: 'bottom',
+          showCloseButton:true,
+          closeButtonText:'OK'
+        });        
+        toast.present();  
+        console.log(e)
+      });
   }
 
   pad(num: number, size: number): string {
@@ -136,6 +162,14 @@ export class ListaRotasPage {
       }).catch(Error => {
         this.load.dismiss();
         this.menuCtrl.close();
+        let toast = this.toastCtrl.create({
+          message: 'Ocorreu um erro ao recuperar dados das rotas.',
+          duration: 5200,
+          position: 'bottom',
+          showCloseButton:true,
+          closeButtonText:'OK'
+        });        
+        toast.present();  
         console.error(Error)
       });
   }

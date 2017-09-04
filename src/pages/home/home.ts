@@ -1,7 +1,7 @@
 import { ColetaProvider } from './../../providers/coleta/coleta';
 import { SqlLiteProvider } from './../../providers/sql-lite/sql-lite';
 import { Component } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
+import { NavController, LoadingController, ToastController } from 'ionic-angular';
 
 
 @Component({
@@ -13,7 +13,8 @@ export class HomePage {
   public exibeColetas: boolean;
   public load: any;
   public coleta;
-  constructor(public navCtrl: NavController, public providerColeta: ColetaProvider, public banco: SqlLiteProvider, public loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public providerColeta: ColetaProvider, public banco: SqlLiteProvider,
+    public loadingCtrl: LoadingController, public toastCtrl: ToastController) {
     this.banco.abrirBanco(true);
 
     //this.carregarColetas();
@@ -26,8 +27,8 @@ export class HomePage {
     this.carregarColetas();
   }
 
-  manterColeta(cliente:number){
-    console.log('Cliente --->'+cliente);
+  manterColeta(cliente: number) {
+    console.log('Cliente --->' + cliente);
     this.navCtrl.push('ManterColetasPage', { clienteID: cliente, coletaID: this.coleta });
   }
 
@@ -37,7 +38,7 @@ export class HomePage {
       content: 'Aguarde, Carregando Coletas...',
     });
     this.load.present();
-    this.providerColeta.consultaColetaCliente(this.coleta,0)
+    this.providerColeta.consultaColetaCliente(this.coleta, 0)
       .then(resp => {
         if (resp == null) {
           return;
@@ -57,6 +58,14 @@ export class HomePage {
         this.load.dismiss();
       }).catch(Error => {
         this.load.dismiss();
+        let toast = this.toastCtrl.create({
+          message: 'Ocorreu um erro ao recuperar dados da coleta id: ' + this.coleta + '.',
+          duration: 5200,
+          position: 'bottom',
+          showCloseButton: true,
+          closeButtonText: 'OK'
+        });
+        toast.present();
         console.error(Error)
       });
   }

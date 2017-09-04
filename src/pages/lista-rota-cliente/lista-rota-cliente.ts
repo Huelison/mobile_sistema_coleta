@@ -1,6 +1,6 @@
 import { RotaClienteProvider } from './../../providers/rota-cliente/rota-cliente';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 
 /**
  * Generated class for the ListaRotaClientePage page.
@@ -15,10 +15,10 @@ import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-an
   templateUrl: 'lista-rota-cliente.html',
 })
 export class ListaRotaClientePage {
-  public load:any;
-  public listaRotaCliente:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, 
-              public providerRotaCliente:RotaClienteProvider,public loadingCtrl:LoadingController) { 
+  public load: any;
+  public listaRotaCliente: any;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
+    public providerRotaCliente: RotaClienteProvider, public toastCtrl: ToastController) {
     let rota = navParams.data.rotaID;
     this.carregarRotas(rota);
   }
@@ -51,6 +51,14 @@ export class ListaRotaClientePage {
         this.load.dismiss();
       }).catch(Error => {
         this.load.dismiss();
+        let toast = this.toastCtrl.create({
+          message: 'Ocorreu um erro ao recuperar dados da rota selecionada.',
+          duration: 5200,
+          position: 'bottom',
+          showCloseButton: true,
+          closeButtonText: 'OK'
+        });
+        toast.present();
         console.error(Error)
       });
   }

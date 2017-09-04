@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ToastController  } from 'ionic-angular';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -12,7 +13,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class SqlLiteProvider {
   public banco: SQLiteObject;
-  constructor(public http: Http, private sqlite: SQLite) {
+  constructor(public http: Http, private sqlite: SQLite, public toastCtrl: ToastController) {
     console.log('Hello SqlLiteProvider Provider');
     this.abrirBanco(true);
   }
@@ -22,13 +23,24 @@ export class SqlLiteProvider {
       location: 'default'
     })
       .then((db: SQLiteObject) => {
+
         this.banco = db;
         if (criar) {
           console.log('aqui');
           this.createDB();
         }
       })
-      .catch(e => console.error('SQLLite: ', e));
+      .catch(e => {
+        let toast = this.toastCtrl.create({
+          message: 'Ocorreu um erro ao criar o banco.',
+          duration: 5200,
+          position: 'bottom',
+          showCloseButton:true,
+          closeButtonText:'OK'
+        });        
+        toast.present();  
+        console.error('SQLLite: ', e)
+      });
   }
   createDB() {
     console.log('Create DB');
@@ -40,14 +52,34 @@ export class SqlLiteProvider {
       ' longitude text, ' +
       ' fone text )', {})
       .then(() => console.log('Tabela clientes criada com sucesso!'))
-      .catch(e => console.error('SQLLite: ', e));
+      .catch(e => {
+        let toast = this.toastCtrl.create({
+          message: 'Ocorreu um erro ao criar Tabela clientes .',
+          duration: 5200,
+          position: 'bottom',
+          showCloseButton:true,
+          closeButtonText:'OK'
+        });        
+        toast.present();  
+        console.error('SQLLite: ', e)
+      });
 
     this.banco.executeSql('create table IF NOT EXISTS rotas( ' +
       ' id integer primary key,' +
       ' nome text,' +
       ' caminhao_atual integer)', {})
       .then(() => console.log('Tabela rotas criada com sucesso!'))
-      .catch(e => console.error('SQLLite: ', e));
+      .catch(e => {
+        let toast = this.toastCtrl.create({
+          message: 'Ocorreu um erro ao criar Tabela rotas.',
+          duration: 5200,
+          position: 'bottom',
+          showCloseButton:true,
+          closeButtonText:'OK'
+        });        
+        toast.present();  
+        console.error('SQLLite: ', e)
+      });
 
     this.banco.executeSql('create table IF NOT EXISTS rotacliente( ' +
       ' ordem integer,' +
@@ -55,7 +87,17 @@ export class SqlLiteProvider {
       ' cliente integer not null ,' +
       ' primary key(cliente, rota))', {})
       .then(() => console.log('Tabela rotacliente criada com sucesso!'))
-      .catch(e => console.error('SQLLite: ', e));
+      .catch(e => {
+        let toast = this.toastCtrl.create({
+          message: 'Ocorreu um erro ao criar Tabela rotacliente.',
+          duration: 5200,
+          position: 'bottom',
+          showCloseButton:true,
+          closeButtonText:'OK'
+        });        
+        toast.present();  
+        console.error('SQLLite: ', e)
+      });
 
     this.banco.executeSql('create table IF NOT EXISTS coletas( ' +
       ' id integer primary key autoincrement,' +
@@ -64,7 +106,17 @@ export class SqlLiteProvider {
       ' data string not null,' +
       ' sincronizado string not null)', {})
       .then(() => console.log('Tabela coleta criada com sucesso!'))
-      .catch(e => console.error('SQLLite: ', e));
+      .catch(e => {
+        let toast = this.toastCtrl.create({
+          message: 'Ocorreu um erro ao criar Tabela coleta.',
+          duration: 5200,
+          position: 'bottom',
+          showCloseButton:true,
+          closeButtonText:'OK'
+        });        
+        toast.present();  
+        console.error('SQLLite: ', e)
+      });
 
     this.banco.executeSql('create table IF NOT EXISTS coletaCliente( ' +
       ' cliente integer not null ,' +
@@ -75,6 +127,16 @@ export class SqlLiteProvider {
       ' alizarol string, '+
       ' primary key(cliente, coleta))', {})
       .then(() => console.log('Tabela coletaCliente criada com sucesso!'))
-      .catch(e => console.error('SQLLite: ', e));
+      .catch(e => {
+        let toast = this.toastCtrl.create({
+          message: 'Ocorreu um erro ao criar Tabela coletaCliente.',
+          duration: 5200,
+          position: 'bottom',
+          showCloseButton:true,
+          closeButtonText:'OK'
+        });        
+        toast.present();  
+        console.error('SQLLite: ', e)
+      });
   }
 }

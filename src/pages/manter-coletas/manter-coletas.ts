@@ -1,6 +1,6 @@
 import { ColetaProvider } from './../../providers/coleta/coleta';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 
 /**
  * Generated class for the ManterColetasPage page.
@@ -28,7 +28,8 @@ export class ManterColetasPage {
   public cliente: any;
   public coleta: any;
   public load: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public providerColeta: ColetaProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
+    public providerColeta: ColetaProvider, public toastCtrl: ToastController) {
     this.cliente = navParams.data.clienteID;
     this.coleta = navParams.data.coletaID;
     this.data = new iColeta();
@@ -50,7 +51,15 @@ export class ManterColetasPage {
         console.log('elemento atualizado com sucesso');
         console.log(data);
       }).catch(Error => {
-        this.load.dismiss();
+        this.load.dismiss();    
+        let toast = this.toastCtrl.create({
+          message: 'Ocorreu um erro ao recuperar dados das coletas.',
+          duration: 5200,
+          position: 'bottom',
+          showCloseButton:true,
+          closeButtonText:'OK'
+        });        
+        toast.present();  
         console.error(Error)
       });
   }
@@ -89,6 +98,14 @@ export class ManterColetasPage {
         this.load.dismiss();
       }).catch(Error => {
         this.load.dismiss();
+        let toast = this.toastCtrl.create({
+          message: 'Ocorreu um erro ao recuperar dados da coleta selecionada.',
+          duration: 5200,
+          position: 'bottom',
+          showCloseButton:true,
+          closeButtonText:'OK'
+        });        
+        toast.present();  
         console.error(Error)
       });
   }
