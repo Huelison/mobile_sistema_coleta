@@ -5,7 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { HttpModule } from '@angular/http';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { SQLite } from '@ionic-native/sqlite';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 

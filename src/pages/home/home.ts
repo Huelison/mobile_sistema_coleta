@@ -21,8 +21,8 @@ export class HomePage {
   }
   ionViewDidLoad() {
 
-
   }
+
   ionViewDidEnter() {
     this.carregarColetas();
   }
@@ -38,28 +38,60 @@ export class HomePage {
       content: 'Aguarde, Carregando Coletas...',
     });
     this.load.present();
-    this.providerColeta.consultaColetaCliente(this.coleta, 0)
+    this.providerColeta.consultarColeta('N')
       .then(resp => {
         if (resp == null) {
           return;
         }
-        var output = [];
+
+        var coleta = [];
         this.exibeColetas = true;
         if (resp.rows) {
           console.log(resp);
           if (resp.rows.length > 0) {
-            for (var i = 0; i < resp.rows.length; i++) {
-              output.push(resp.rows.item(i));
-            }
+            coleta.push(resp.rows.item(0));
+            this.coleta = coleta[0].id;
+            this.providerColeta.consultaColetaCliente(this.coleta, 0)
+              .then(resp => {
+                if (resp == null) {
+                  return;
+                }
+                var output = [];
+                this.exibeColetas = true;
+                if (resp.rows) {
+                  console.log(resp);
+                  if (resp.rows.length > 0) {
+                    for (var i = 0; i < resp.rows.length; i++) {
+                      output.push(resp.rows.item(i));
+                    }
+                  }
+                  console.log(output);
+                }
+                this.listaColetas = output;
+                this.load.dismiss();
+              }).catch(Error => {
+                this.load.dismiss();
+                let toast = this.toastCtrl.create({
+                  message: 'Ocorreu um erro ao recuperar dados da coleta id: ' + this.coleta + '.',
+                  duration: 5200,
+                  position: 'bottom',
+                  showCloseButton: true,
+                  closeButtonText: 'OK'
+                });
+                toast.present();
+                console.error(Error)
+              });
+          }else{
+            this.load.dismiss();    
           }
-          console.log(output);
+        }else{
+          this.load.dismiss();
         }
-        this.listaColetas = output;
-        this.load.dismiss();
+        console.log(coleta);
       }).catch(Error => {
         this.load.dismiss();
         let toast = this.toastCtrl.create({
-          message: 'Ocorreu um erro ao recuperar dados da coleta id: ' + this.coleta + '.',
+          message: 'Ocorreu um erro ao recuperar dados das coletas.',
           duration: 5200,
           position: 'bottom',
           showCloseButton: true,
@@ -68,5 +100,6 @@ export class HomePage {
         toast.present();
         console.error(Error)
       });
+
   }
 }

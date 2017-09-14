@@ -19,10 +19,11 @@ export class ColetaProvider {
   }
   //manter coleta 
   iniciarColeta(rotaID) {
-    let query = "INSERT INTO coletas(rota, caminhao, data, sincronizado) " +
-      " VALUES (?,?,?,?)";
-    return this.banco.banco.executeSql(query, [rotaID, 1, '5', 'N']);
+    let query = "INSERT INTO coletas(rota, caminhao, data, sincronizado, finalizado) " +
+      " VALUES (?,?,?,?,?)";
+    return this.banco.banco.executeSql(query, [rotaID, 1, '5', 'N', 'N']);
   }
+
   iniciarColetaCliente(data) {
     console.log(data.cliente);
     let query = 'INSERT INTO coletaCliente(cliente, coleta, quantidade, hora, temperatura, alizarol) ' +
@@ -37,6 +38,20 @@ export class ColetaProvider {
       ' where cliente = ? and coleta =? ';
     return this.banco.banco.executeSql(query, [data.quantidade, data.hora,
     data.temperatura, (data.alizarol ? 'S' : 'N'), data.cliente, data.coleta]);
+  }
+  //recebe por parametro se vai ser somente os finalizados (S), não finalizados (N) ou todos (T) 
+  consultarColeta(Finalizado = 'T') {
+    var query = "Select cl.* from coletas cl";
+    if (Finalizado == 'S')
+      query += " where cl.finalizado = 'S' ";
+
+    if (Finalizado == 'N')
+      query += " where cl.finalizado = 'N' ";
+
+    query += " order by data desc";
+    console.error(query);
+
+    return this.banco.banco.executeSql(query, []);
   }
 
   consultaColetaCliente(idColeta, idCliente) {

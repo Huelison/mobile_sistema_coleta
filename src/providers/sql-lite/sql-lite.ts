@@ -104,6 +104,7 @@ export class SqlLiteProvider {
       ' rota integer not null,' +
       ' caminhao integer not null,' +
       ' data string not null,' +
+      ' finalizado string not null,' +
       ' sincronizado string not null)', {})
       .then(() => console.log('Tabela coleta criada com sucesso!'))
       .catch(e => {

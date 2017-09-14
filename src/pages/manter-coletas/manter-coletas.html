@@ -19,7 +19,7 @@
       <ion-input type="number" placeholder="Informe a quantidade coletada" [(ngModel)]="data.quantidade"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label color="primary" class="dateLabel" >Hora da Coleta</ion-label>
+      <ion-label color="primary" class="dateLabel">Hora da Coleta</ion-label>
       <ion-input type="time" [(ngModel)]="data.hora"></ion-input>
     </ion-item>
     <ion-item>
@@ -35,16 +35,18 @@
       <ion-label>Hora da Coleta</ion-label>
       <ion-datetime displayFormat="HH:mm:ss" pickerFormat="HH mm ss" ></ion-datetime>
     </ion-item>-->
-    <ion-row>
-      <ion-buttons start>
-        <button ion-button  (click)="salvarColeta()">
-          Salvar
+    <ion-item>
+      <ion-row>
+        <ion-buttons start>
+          <button ion-button (click)="salvarColeta()">
+          Salvar 
           <ion-icon name="checkmark-circle-outline"></ion-icon>
         </button>
-        <button ion-button icon-only>
+          <button ion-button icon-only>
           <ion-icon name="close-circle"></ion-icon>
         </button>
-      </ion-buttons>
-    </ion-row>
+        </ion-buttons>
+      </ion-row>
+    </ion-item>
   </ion-list>
 </ion-content>

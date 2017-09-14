@@ -1,9 +1,8 @@
 import { RotaClienteProvider } from './../../providers/rota-cliente/rota-cliente';
 import { ColetaProvider } from './../../providers/coleta/coleta';
 import { RotaProvider } from './../../providers/rota/rota';
-import { SqlLiteProvider } from './../../providers/sql-lite/sql-lite';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Loading, MenuController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, MenuController, ToastController } from 'ionic-angular';
 
 /**
  * Generated class for the ListaRotasPage page.
@@ -56,8 +55,8 @@ export class ListaRotasPage {
           if (resp.rows) {
             console.log(resp);
             if (resp.rows.length > 0) {
-              for (var i = 0; i < resp.rows.length; i++) {
-                output.push(resp.rows.item(i));
+              for (var j = 0; j < resp.rows.length; j++) {
+                output.push(resp.rows.item(j));
               }
             }
             console.log(output);
