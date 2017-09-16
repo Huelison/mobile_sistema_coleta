@@ -68,4 +68,9 @@ export class ColetaProvider {
     return this.banco.banco.executeSql(query, []);
   }
 
+  finalizarColeta(idColeta){
+    let query = "update coletas set finalizado='S' where id = ?";
+    return this.banco.banco.executeSql(query, [idColeta]);
+  }
+
 }
