@@ -35,6 +35,9 @@ export class MyApp {
       case 'ListaRotas':
         this.nav.push('ListaRotasPage');
       break;      
+      case 'ListaColetas':
+        this.nav.push('ListaColetasPage');
+      break;      
       default:
       break;
     } 

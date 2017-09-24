@@ -97,13 +97,13 @@ export class HomePage {
           } else {
             this.load.dismiss();
             this.exibeColetas = false;
-            
+
           }
         } else {
           this.load.dismiss();
           this.exibeColetas = false;
         }
-        if(!this.exibeColetas){
+        if (!this.exibeColetas) {
           this.carregarRotas();
           console.log('Carregar rotas');
         }

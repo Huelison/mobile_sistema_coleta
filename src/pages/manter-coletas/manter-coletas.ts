@@ -1,6 +1,9 @@
 import { ColetaProvider } from './../../providers/coleta/coleta';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { format, subDays } from 'date-fns';
+import * as moment from 'moment';
+import * as moment_timezone from 'moment-timezone';
 
 /**
  * Generated class for the ManterColetasPage page.
@@ -88,7 +91,12 @@ export class ManterColetasPage {
           this.data.cliente = output.cliente;
           this.data.cliente_nome = output.nome;
           this.data.coleta = output.coleta;
-          this.data.hora = output.hora;
+          if (output.hora==null){                
+            this.data.hora = moment_timezone.tz('America/Sao_Paulo').format('HH:mm');
+          }            
+          else
+            this.data.hora = output.hora
+
           this.data.temperatura = output.temperatura;
           /*
           this.data.alizarol = output.alizarol;
