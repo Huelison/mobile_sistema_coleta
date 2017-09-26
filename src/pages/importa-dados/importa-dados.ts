@@ -1,6 +1,7 @@
+import { ColetaProvider } from './../../providers/coleta/coleta';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController, ToastController } from 'ionic-angular';
 import { SqlLiteProvider } from '../../providers/sql-lite/sql-lite';
 
 
@@ -18,8 +19,11 @@ import { SqlLiteProvider } from '../../providers/sql-lite/sql-lite';
 })
 export class ImportaDadosPage {
   public listaClientes: FirebaseListObservable<any>;
+  public atual: number;
+  public total: number;
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController,
-    public banco: SqlLiteProvider, public af: AngularFireDatabase) {
+    public banco: SqlLiteProvider, public af: AngularFireDatabase, public providerColeta: ColetaProvider,
+    public toastCtrl: ToastController) {
     this.banco.abrirBanco(false);
   }
 
@@ -31,12 +35,35 @@ export class ImportaDadosPage {
     this.listaClientes = this.af.list('/clientes');
     this.listaClientes.subscribe(dados => {
       if (dados.length > 0) {
+        this.total = dados.length;
         dados.forEach(data => {
           let query = "INSERT or replace INTO clientes(id, nome, endereco, fone) " +
             " VALUES (?,?,?,?)";
           this.banco.banco.executeSql(query, [data.id, data.nome, data.endereco, data.fone])
-            .then((data) => console.log('elemento inserido com sucesso'))
-            .catch(e => console.log(e));
+            .then((data) => {
+              this.atual++;
+              if (this.atual == this.total) {
+                let toast = this.toastCtrl.create({
+                  message: 'Clientes importados com Sucesso.',
+                  duration: 5200,
+                  position: 'bottom',
+                  showCloseButton: true,
+                  closeButtonText: 'OK'
+                });
+                toast.present();
+              }
+            })
+            .catch(e => {
+              let toast = this.toastCtrl.create({
+                message: 'Ocorreu um erro ao importar clientes.',
+                duration: 5200,
+                position: 'bottom',
+                showCloseButton: true,
+                closeButtonText: 'OK'
+              });
+              toast.present();
+              console.log(e)
+            });
         });
       }
       // calculate average here
@@ -66,7 +93,6 @@ export class ImportaDadosPage {
                     " VALUES (?,?,?)";
                   this.banco.banco.executeSql(query1, [element.ordem, element.cliente, rota])
                     .then((data1) => {
-
                       console.log('elemento inserido com sucesso')
                     }).catch(e => console.log(e));
                   console.log('elemento inserido com sucesso')
@@ -86,10 +112,9 @@ export class ImportaDadosPage {
     }, function (err) {
       console.log(err);
     });
-
   }
-  teste() {
 
+  teste() {
     this.banco.banco.executeSql('select * from rotas r, rotaCliente c where c.rota=r.id', [])
       .then((resp) => {
         if (resp == null) {
@@ -109,6 +134,65 @@ export class ImportaDadosPage {
       })
       .catch((Error) => console.log(Error)
       )
+  }
+
+  exportarColetas() {
+    this.providerColeta.consultarColeta('S', 'N')
+      .then((resp) => {
+        if (resp == null) {
+          return;
+        }
+        var output = [];
+        if (resp.rows) {
+          console.log(resp);
+          if (resp.rows.length > 0) {
+            for (var i = 0; i < resp.rows.length; i++) {
+              output.push(resp.rows.item(i));
+              this.providerColeta.consultaColetaCliente(resp.rows.item(i).id, 0)
+                .then((resp) => {
+                  if (resp == null) {
+                    return;
+                  }
+                  var output = [];
+                  if (resp.rows) {
+                    console.log(resp);
+                    if (resp.rows.length > 0) {
+                      var coleta = {
+                        caminhao: resp.rows.item(0).caminhao,
+                        data: resp.rows.item(0).data,
+                        rota: resp.rows.item(0).rota,
+                        ColetaCliente: new Object(),
+                        Sincronizado: 'N'
+                      }
+                      var objColetaCliente = {};
+                      for (var i = 0; i < resp.rows.length; i++) {
+                        output.push(resp.rows.item(i));
+                        let xColetaCliente = {
+                          alizarol: resp.rows.item(i).alizarol,
+                          cliente: resp.rows.item(i).cliente,
+                          hora: resp.rows.item(i).hora,
+                          quantidade: resp.rows.item(i).quantidade,
+                          temperatura: resp.rows.item(i).temperatura
+                        }
+                        objColetaCliente[resp.rows.item(i).cliente] = xColetaCliente;
+                      }
+                      coleta.ColetaCliente = objColetaCliente;
+                      console.log(JSON.stringify(coleta));
+                      this.af.list('/Coletas').push(coleta);
+                    }
+                    console.log(output);
+                  }
+
+                })
+                .catch((Error) => {
+                  console.log(Error)
+                })
+            }
+          }
+          console.log(output);
+        }
+
+      }).catch((Error) => console.log(Error))
   }
 
   ionViewDidLoad() {

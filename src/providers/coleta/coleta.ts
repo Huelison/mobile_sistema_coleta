@@ -40,13 +40,26 @@ export class ColetaProvider {
     data.temperatura, (data.alizarol ? 'S' : 'N'), data.cliente, data.coleta]);
   }
   //recebe por parametro se vai ser somente os finalizados (S), não finalizados (N) ou todos (T) 
-  consultarColeta(Finalizado = 'T') {
+  consultarColeta(Finalizado = 'T', Sincronizado = 'T') {
     var query = "Select cl.* from coletas cl";
+    var where = "";
     if (Finalizado == 'S')
-      query += " where cl.finalizado = 'S' ";
+      where += " cl.finalizado = 'S' ";
 
     if (Finalizado == 'N')
-      query += " where cl.finalizado = 'N' ";
+      where += " cl.finalizado = 'N' ";
+
+    if (where != "" && ((Sincronizado == 'S') || (Sincronizado == 'N')))
+      where += " and ";
+
+    if (Sincronizado == 'S')
+      where += " cl.sincronizado = 'S' ";
+
+    if (Sincronizado == 'N')
+      where += " cl.sincronizado = 'N' ";
+
+    if (where != "")
+      query += " where " + where;
 
     query += " order by data desc";
     console.error(query);
@@ -68,9 +81,8 @@ export class ColetaProvider {
     return this.banco.banco.executeSql(query, []);
   }
 
-  finalizarColeta(idColeta){
+  finalizarColeta(idColeta) {
     let query = "update coletas set finalizado='S' where id = ?";
     return this.banco.banco.executeSql(query, [idColeta]);
   }
-
 }

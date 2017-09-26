@@ -27,10 +27,10 @@
               <ion-col col-7 col-sm-5>
                 <ion-icon name="call"> {{coletaCliente.fone}}</ion-icon>
               </ion-col>
-              <ion-col col-5 col-sm-3 push-sm-4 text-right >
+              <ion-col col-5 col-sm-3 push-sm-4 text-right>
                 Ordem Coleta: {{coletaCliente.ordem}}
               </ion-col>
-              <ion-col col-6 col-sm-6 push-sm-6  [hidden]="(coletaCliente.hora == null)">
+              <ion-col col-6 col-sm-6 push-sm-6 [hidden]="(coletaCliente.hora == null)">
                 Quantidade Coleta: {{coletaCliente.quantidade}}
               </ion-col>
               <ion-col col-6 col-sm-6 pull-sm-6 text-right [hidden]="(coletaCliente.hora == null)">
@@ -41,7 +41,7 @@
         </ion-card>
       </ion-item>
     </ion-list>
-    
+
     <ion-fab right bottom>
       <button ion-fab color="light" (click)="finalizarColeta()">  <ion-icon name="alert"></ion-icon></button>
     </ion-fab>
@@ -52,7 +52,7 @@
         <ion-item>
           {{rota.nome}}
         </ion-item>
-      <!-- slide left items down here -->
+        <!-- slide left items down here -->
         <ion-item-options side='left'>
           <button (click)='exibirClientes(rota.id)' color='primary'>Exibir Clientes</button>
           <button (click)='iniciarColeta(rota.id)' color='primary'>Iniciar Coleta</button>

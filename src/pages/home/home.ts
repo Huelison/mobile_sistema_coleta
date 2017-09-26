@@ -23,13 +23,14 @@ export class HomePage {
   public exibeColetas: boolean;
   public load: any;
   public coleta;
+  public atual: number;
+  public total: number;
   listaRotas: any;
 
   constructor(public navCtrl: NavController, public providerColeta: ColetaProvider, public banco: SqlLiteProvider,
     public loadingCtrl: LoadingController, public toastCtrl: ToastController, public providerRotaCliente: RotaClienteProvider,
     public providerRota: RotaProvider) {
     this.banco.abrirBanco(true);
-
     //this.carregarColetas();
   }
   ionViewDidLoad() {
@@ -132,6 +133,14 @@ export class HomePage {
         this.load.dismiss();
         console.log('elemento atualizado com sucesso');
         console.log(data);
+        let toast = this.toastCtrl.create({
+          message: 'Coleta finalizada com sucesso.',
+          duration: 5200,
+          position: 'bottom',
+          showCloseButton: true,
+          closeButtonText: 'OK'
+        });
+        toast.present();
         this.carregarColetas();
       }).catch(Error => {
         this.load.dismiss();
@@ -177,7 +186,9 @@ export class HomePage {
           }
 
           if (output.length > 0) {
+            this.total = output.length;
             for (var i = 0; i < output.length; i++) {
+
               var dados = new iRota();
               console.log(output[i]);
               console.log(output[i].cliente);
@@ -194,8 +205,18 @@ export class HomePage {
                   console.log('elemento inserido com sucesso');
                   console.log(data);
                   console.log(dados);
-
-
+                  this.atual++;
+                  if (this.atual == this.total) {
+                    let toast = this.toastCtrl.create({
+                      message: 'Coleta iniciada com sucesso.',
+                      duration: 5200,
+                      position: 'bottom',
+                      showCloseButton: true,
+                      closeButtonText: 'OK'
+                    });
+                    toast.present();
+                    this.carregarColetas();
+                  }
                 }).catch(Error => {
                   this.load.dismiss();
                   let toast = this.toastCtrl.create({
@@ -224,8 +245,7 @@ export class HomePage {
           toast.present();
           console.error(Error)
         });
-      })
-      .catch(e => {
+      }).catch(e => {
         let toast = this.toastCtrl.create({
           message: 'Ocorreu um erro ao iniciar a coleta.',
           duration: 5200,
