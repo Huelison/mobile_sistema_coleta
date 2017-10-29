@@ -30,6 +30,7 @@ export class MyApp {
     }
     switch (pagina) {
       case 'ImportaDados':
+        //aqui faz login
         this.nav.push('ImportaDadosPage');
       break;
       case 'ListaRotas':

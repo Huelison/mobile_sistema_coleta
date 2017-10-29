@@ -14,10 +14,13 @@ import * as moment_timezone from 'moment-timezone';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { LoginPage } from './../pages/login/login';
+
 import { SqlLiteProvider } from '../providers/sql-lite/sql-lite';
 import { RotaClienteProvider } from '../providers/rota-cliente/rota-cliente';
 import { RotaProvider } from '../providers/rota/rota';
 import { ColetaProvider } from '../providers/coleta/coleta';
+import { LoginProvider } from '../providers/login/login';
 
 var config = {
   apiKey: "AIzaSyA-XNBTD3Q3F4EFD9qFPMdfl1pYkeYZAss",
@@ -43,7 +46,8 @@ var config = {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    LoginPage
   ],
   providers: [
     StatusBar,
@@ -55,7 +59,8 @@ var config = {
     RotaProvider,
     LoadingController,
     ColetaProvider,
-    DateTime
+    DateTime,
+    LoginProvider
   ]
 })
 export class AppModule { }

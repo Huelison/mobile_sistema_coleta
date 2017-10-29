@@ -1,3 +1,5 @@
+import { LoginPage } from './../login/login';
+import { LoginProvider } from './../../providers/login/login';
 import { RotaProvider } from './../../providers/rota/rota';
 import { RotaClienteProvider } from './../../providers/rota-cliente/rota-cliente';
 import { ColetaProvider } from './../../providers/coleta/coleta';
@@ -29,7 +31,7 @@ export class HomePage {
 
   constructor(public navCtrl: NavController, public providerColeta: ColetaProvider, public banco: SqlLiteProvider,
     public loadingCtrl: LoadingController, public toastCtrl: ToastController, public providerRotaCliente: RotaClienteProvider,
-    public providerRota: RotaProvider) {
+    public providerRota: RotaProvider, public loginProvider: LoginProvider) {
     this.banco.abrirBanco(true);
     //this.carregarColetas();
   }
@@ -300,4 +302,19 @@ export class HomePage {
       });
   }
 
+  
+
+  getLogado() {
+    //consulta se está logado
+    this.loginProvider.user.subscribe(user => {
+      if (!user) {
+        this.navCtrl.setRoot(LoginPage);
+        this.navCtrl.popToRoot();
+        console.log(null);
+        return;
+      }
+      console.log(user);
+    });
+    console.log(this.loginProvider.user)
+  }
 }

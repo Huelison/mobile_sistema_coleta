@@ -31,7 +31,6 @@ export class ImportaDadosPage {
   }
 
   importarClientes() {
-
     this.listaClientes = this.af.list('/clientes');
     this.listaClientes.subscribe(dados => {
       if (dados.length > 0) {
@@ -66,7 +65,6 @@ export class ImportaDadosPage {
             });
         });
       }
-      // calculate average here
     }, function (err) {
       console.log(err);
     });
@@ -85,7 +83,7 @@ export class ImportaDadosPage {
             " VALUES (?,?,?)";
           this.banco.banco.executeSql(query, [data.id, data.nome, data.caminhao_atual])
             .then((data2) => {
-              console.log(rota)
+              console.log(data2); //rever o negocio de importar, esse key nao rola aqui
               this.af.list('/rotas/' + data.$key + '/RotaCliente').subscribe(dados1 => {
                 dados1.forEach(element => {
                   console.log(element);
@@ -182,7 +180,6 @@ export class ImportaDadosPage {
                     }
                     console.log(output);
                   }
-
                 })
                 .catch((Error) => {
                   console.log(Error)
@@ -191,7 +188,6 @@ export class ImportaDadosPage {
           }
           console.log(output);
         }
-
       }).catch((Error) => console.log(Error))
   }
 
