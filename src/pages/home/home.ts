@@ -302,8 +302,6 @@ export class HomePage {
       });
   }
 
-  
-
   getLogado() {
     //consulta se está logado
     this.loginProvider.user.subscribe(user => {

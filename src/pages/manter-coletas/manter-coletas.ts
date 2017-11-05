@@ -35,6 +35,8 @@ export class ManterColetasPage {
     public providerColeta: ColetaProvider, public toastCtrl: ToastController) {
     this.cliente = navParams.data.clienteID;
     this.coleta = navParams.data.coletaID;
+    console.log(navParams.data);
+    
     this.data = new iColeta();
     this.carregarColetaCliente();
   }

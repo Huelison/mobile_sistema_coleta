@@ -1,3 +1,4 @@
+import { LoginPage } from './../pages/login/login';
 import { Component,ViewChild } from '@angular/core';
 import { Platform,Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';

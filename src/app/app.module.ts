@@ -8,6 +8,7 @@ import { HttpModule } from '@angular/http';
 import { SQLite } from '@ionic-native/sqlite';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
 import { format, subDays } from 'date-fns';
 import * as moment from 'moment';
 import * as moment_timezone from 'moment-timezone';
@@ -35,6 +36,7 @@ var config = {
   declarations: [
     MyApp,
     HomePage,
+    LoginPage
   ],
   imports: [
     BrowserModule,
@@ -60,6 +62,7 @@ var config = {
     LoadingController,
     ColetaProvider,
     DateTime,
+    AngularFireAuth,
     LoginProvider
   ]
 })
