@@ -176,7 +176,7 @@ export class ImportaDadosPage {
                       }
                       coleta.ColetaCliente = objColetaCliente;
                       console.log(JSON.stringify(coleta));
-                      this.af.list('/Coletas').push(coleta);
+                      this.af.list('/Coletas').push(coleta);//colocar o sincronismo
                     }
                     console.log(output);
                   }

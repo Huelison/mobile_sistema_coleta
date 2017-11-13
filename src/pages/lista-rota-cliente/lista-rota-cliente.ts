@@ -17,10 +17,11 @@ import { IonicPage, NavController, NavParams, LoadingController, ToastController
 export class ListaRotaClientePage {
   public load: any;
   public listaRotaCliente: any;
+  public rota 
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
     public providerRotaCliente: RotaClienteProvider, public toastCtrl: ToastController) {
-    let rota = navParams.data.rotaID;
-    this.carregarRotas(rota);
+    this.rota = navParams.data.rotaID;
+    this.carregarRotas(this.rota);
   }
 
   ionViewDidLoad() {
