@@ -2,6 +2,7 @@ import { RotaClienteProvider } from './../rota-cliente/rota-cliente';
 import { SqlLiteProvider } from './../sql-lite/sql-lite';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import * as moment_timezone from 'moment-timezone';
 import 'rxjs/add/operator/map';
 
 /*
@@ -21,7 +22,7 @@ export class ColetaProvider {
   iniciarColeta(rotaID) {
     let query = "INSERT INTO coletas(rota, caminhao, data, sincronizado, finalizado) " +
       " VALUES (?,?,?,?,?)";
-    return this.banco.banco.executeSql(query, [rotaID, 1, '5', 'N', 'N']);
+    return this.banco.banco.executeSql(query, [rotaID, 1,moment_timezone.tz('America/Sao_Paulo').format('DD/MM/YYYY'), 'N', 'N']);
   }
 
   iniciarColetaCliente(data) {
@@ -86,105 +87,11 @@ export class ColetaProvider {
     return this.banco.banco.executeSql(query, [idColeta]);
   }
 
+  sincronizarColeta() {
+    let query = "update coletas set sincronizado='S'";
+    return this.banco.banco.executeSql(query, []);
+  }
   validarColeta(idColeta){
 
   }
-/*
-  iniciarAllColeta(idRota){
-    this.load = this.loadingCtrl.create({
-      content: 'Aguarde, Carregando Rotas...',
-    });
-    this.load.present();
-    this.iniciarColeta(idRota)
-      .then((data) => {
-        console.log('elemento inserido com sucesso');
-        console.log(data);
-
-        this.providerRotaCliente.getClientesRota(idRota).then(resp => {
-          if (resp == null) {
-            return;
-          }
-          var output = [];
-          if (resp.rows) {
-            console.log(resp);
-            if (resp.rows.length > 0) {
-              for (var j = 0; j < resp.rows.length; j++) {
-                output.push(resp.rows.item(j));
-              }
-            }
-            console.log(output);
-          }
-
-          if (output.length > 0) {
-            this.total = output.length;
-            for (var i = 0; i < output.length; i++) {
-
-              var dados = new iRota();
-              console.log(output[i]);
-              console.log(output[i].cliente);
-
-              dados.cliente = output[i].cliente;
-              dados.coleta = data.insertId;
-              dados.quantidade = -1;
-              dados.hora = null;//usar dois digitos 
-              dados.temperatura = null;
-              dados.alizarol = null;
-              console.log(dados.hora);
-              this.iniciarColetaCliente(dados)
-                .then((data) => {
-                  console.log('elemento inserido com sucesso');
-                  console.log(data);
-                  console.log(dados);
-                  this.atual++;
-                  if (this.atual == this.total) {
-                    let toast = this.toastCtrl.create({
-                      message: 'Coleta iniciada com sucesso.',
-                      duration: 5200,
-                      position: 'bottom',
-                      showCloseButton: true,
-                      closeButtonText: 'OK'
-                    });
-                    toast.present();
-                    this.carregarColetas();
-                  }
-                }).catch(Error => {
-                  this.load.dismiss();
-                  let toast = this.toastCtrl.create({
-                    message: 'Ocorreu um erro ao inserir os clientes na coleta.',
-                    duration: 5200,
-                    position: 'bottom',
-                    showCloseButton: true,
-                    closeButtonText: 'OK'
-                  });
-                  toast.present();
-                  console.error(Error)
-                });
-            }
-          }
-          //this.listaRotaCliente = output;
-          this.load.dismiss();
-        }).catch(Error => {
-          this.load.dismiss();
-          let toast = this.toastCtrl.create({
-            message: 'Ocorreu um erro ao recuperar dados da rota selecionada.',
-            duration: 5200,
-            position: 'bottom',
-            showCloseButton: true,
-            closeButtonText: 'OK'
-          });
-          toast.present();
-          console.error(Error)
-        });
-      }).catch(e => {
-        let toast = this.toastCtrl.create({
-          message: 'Ocorreu um erro ao iniciar a coleta.',
-          duration: 5200,
-          position: 'bottom',
-          showCloseButton: true,
-          closeButtonText: 'OK'
-        });
-        toast.present();
-        console.log(e)
-      });
-  }*/
 }

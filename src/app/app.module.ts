@@ -22,6 +22,7 @@ import { RotaClienteProvider } from '../providers/rota-cliente/rota-cliente';
 import { RotaProvider } from '../providers/rota/rota';
 import { ColetaProvider } from '../providers/coleta/coleta';
 import { LoginProvider } from '../providers/login/login';
+import { CaminhaoProvider } from '../providers/caminhao/caminhao';
 
 var config = {
   apiKey: "AIzaSyA-XNBTD3Q3F4EFD9qFPMdfl1pYkeYZAss",
@@ -63,7 +64,8 @@ var config = {
     ColetaProvider,
     DateTime,
     AngularFireAuth,
-    LoginProvider
+    LoginProvider,
+    CaminhaoProvider
   ]
 })
 export class AppModule { }

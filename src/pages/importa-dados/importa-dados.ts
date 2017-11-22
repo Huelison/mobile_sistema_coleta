@@ -3,6 +3,8 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController, ToastController } from 'ionic-angular';
 import { SqlLiteProvider } from '../../providers/sql-lite/sql-lite';
+import { LoginPage } from './../login/login';
+import { LoginProvider } from './../../providers/login/login';
 
 
 /**
@@ -23,8 +25,10 @@ export class ImportaDadosPage {
   public total: number;
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController,
     public banco: SqlLiteProvider, public af: AngularFireDatabase, public providerColeta: ColetaProvider,
-    public toastCtrl: ToastController) {
+    public toastCtrl: ToastController, public loginProvider: LoginProvider) {
+
     this.banco.abrirBanco(false);
+    this.getLogado();
   }
 
   inserirCliente() {
@@ -176,7 +180,9 @@ export class ImportaDadosPage {
                       }
                       coleta.ColetaCliente = objColetaCliente;
                       console.log(JSON.stringify(coleta));
-                      this.af.list('/Coletas').push(coleta);//colocar o sincronismo
+                      this.af.list('/Coletas').push(coleta).then((data) => {
+                        this.providerColeta.sincronizarColeta();
+                      });//colocar o sincronismo
                     }
                     console.log(output);
                   }
@@ -193,6 +199,18 @@ export class ImportaDadosPage {
 
   ionViewDidLoad() {
     this.menuCtrl.close();
+  }
+
+  getLogado() {
+    //colocar load
+    this.loginProvider.user.subscribe(user => {
+      if (!user) {
+        this.navCtrl.setRoot(LoginPage);
+        this.navCtrl.popToRoot();
+        return;
+      }
+    });
+    //tirar load
   }
 
 }

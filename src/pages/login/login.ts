@@ -25,6 +25,7 @@ export class LoginPage {
         this.navCtrl.popToRoot();
         return;
       } else {
+        this.loginProvider.inserirUsuario(user.uid);
         this.navCtrl.setRoot(HomePage);
       }
     });
@@ -32,10 +33,6 @@ export class LoginPage {
 
   getLogin() {
     this.loginProvider.signIn(this.email, this.senha);
-  }
-
-  getSignUp() {
-    this.loginProvider.signUp(this.email, this.senha);
   }
   
 }

@@ -17,7 +17,14 @@
   <ion-list>
     <ion-item-sliding #slidingitem *ngFor="let coleta of listaColetas">
       <ion-item>
-        {{coleta.data}}
+        <ion-row>
+          <ion-col col-12 col-sm-6>
+            <ion-icon name="calendar"> Data da coleta: {{coleta.data}}</ion-icon>
+          </ion-col>
+          <ion-col col-12 col-sm-6>
+            <ion-icon name="map"> Rota da coleta: {{coleta.rota}}</ion-icon>
+          </ion-col>
+        </ion-row>
       </ion-item>
       <!-- slide left items down here -->
       <ion-item-options side='left'>

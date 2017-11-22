@@ -1,8 +1,6 @@
 import { ColetaProvider } from './../../providers/coleta/coleta';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
-import { format, subDays } from 'date-fns';
-import * as moment from 'moment';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular'; 
 import * as moment_timezone from 'moment-timezone';
 
 /**
@@ -50,6 +48,7 @@ export class ManterColetasPage {
       content: 'Aguarde, Salvando Coleta...',
     });
     this.load.present();
+    //validaçoes
     this.providerColeta.salvarColetaCliente(this.data)
       .then((data) => {
         this.load.dismiss();
@@ -58,7 +57,7 @@ export class ManterColetasPage {
       }).catch(Error => {
         this.load.dismiss();    
         let toast = this.toastCtrl.create({
-          message: 'Ocorreu um erro ao recuperar dados das coletas.',
+          message: 'Ocorreu um erro ao salvar coleta.',
           duration: 5200,
           position: 'bottom',
           showCloseButton:true,
@@ -118,5 +117,9 @@ export class ManterColetasPage {
         toast.present();  
         console.error(Error)
       });
+  }
+
+  cancelarColeta(){
+    this.navCtrl.pop();
   }
 }

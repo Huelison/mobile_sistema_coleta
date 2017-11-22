@@ -5,7 +5,7 @@ import { RotaClienteProvider } from './../../providers/rota-cliente/rota-cliente
 import { ColetaProvider } from './../../providers/coleta/coleta';
 import { SqlLiteProvider } from './../../providers/sql-lite/sql-lite';
 import { Component } from '@angular/core';
-import { NavController, LoadingController, ToastController } from 'ionic-angular';
+import { NavController, LoadingController, ToastController, AlertController } from 'ionic-angular';
 
 export class iRota {
   public cliente: number;
@@ -31,9 +31,10 @@ export class HomePage {
 
   constructor(public navCtrl: NavController, public providerColeta: ColetaProvider, public banco: SqlLiteProvider,
     public loadingCtrl: LoadingController, public toastCtrl: ToastController, public providerRotaCliente: RotaClienteProvider,
-    public providerRota: RotaProvider, public loginProvider: LoginProvider) {
+    public providerRota: RotaProvider, public loginProvider: LoginProvider, public alertCtrl: AlertController) {
     this.banco.abrirBanco(true);
     //this.carregarColetas();
+    this.getLogado();
   }
   ionViewDidLoad() {
 
@@ -45,7 +46,9 @@ export class HomePage {
 
   manterColeta(cliente: number) {
     console.log('Cliente --->' + cliente);
-    this.navCtrl.push('ManterColetasPage', { clienteID: cliente, coletaID: this.coleta });
+    this.navCtrl.push('ManterColetasPage', { clienteID: cliente, coletaID: this.coleta }).then(data => {
+      this.carregarColetas()
+    });
   }
 
   carregarColetas() {
@@ -126,36 +129,55 @@ export class HomePage {
   }
 
   finalizarColeta() {
-    this.load = this.loadingCtrl.create({
-      content: 'Aguarde, Finalizando Coleta...',
+    let alert = this.alertCtrl.create({
+      title: 'Confirma a finalização da Coleta?',
+      message: '',
+      buttons: [
+        {
+          text: 'Finalizar',
+          handler: () => {
+            this.load = this.loadingCtrl.create({
+              content: 'Aguarde, Finalizando Coleta...',
+            });
+            alert.present();
+
+            this.load.present();
+            this.providerColeta.finalizarColeta(this.coleta)
+              .then((data) => {
+                this.load.dismiss();
+                console.log('elemento atualizado com sucesso');
+                console.log(data);
+                let toast = this.toastCtrl.create({
+                  message: 'Coleta finalizada com sucesso.',
+                  duration: 5200,
+                  position: 'bottom',
+                  showCloseButton: true,
+                  closeButtonText: 'OK'
+                });
+                toast.present();
+                this.carregarColetas();
+              }).catch(Error => {
+                this.load.dismiss();
+                let toast = this.toastCtrl.create({
+                  message: 'Ocorreu um erro ao finalizar coleta.',
+                  duration: 5200,
+                  position: 'bottom',
+                  showCloseButton: true,
+                  closeButtonText: 'OK'
+                });
+                toast.present();
+                console.error(Error)
+              });
+          }
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+      ]
     });
-    this.load.present();
-    this.providerColeta.finalizarColeta(this.coleta)
-      .then((data) => {
-        this.load.dismiss();
-        console.log('elemento atualizado com sucesso');
-        console.log(data);
-        let toast = this.toastCtrl.create({
-          message: 'Coleta finalizada com sucesso.',
-          duration: 5200,
-          position: 'bottom',
-          showCloseButton: true,
-          closeButtonText: 'OK'
-        });
-        toast.present();
-        this.carregarColetas();
-      }).catch(Error => {
-        this.load.dismiss();
-        let toast = this.toastCtrl.create({
-          message: 'Ocorreu um erro ao finalizar coleta.',
-          duration: 5200,
-          position: 'bottom',
-          showCloseButton: true,
-          closeButtonText: 'OK'
-        });
-        toast.present();
-        console.error(Error)
-      });
   }
 
   exibirClientes(rota) {
@@ -303,16 +325,24 @@ export class HomePage {
   }
 
   getLogado() {
-    //consulta se está logado
-    this.loginProvider.user.subscribe(user => {
-      if (!user) {
+    this.loginProvider.getUsuario().then((resp) => {
+      let usuario: boolean = false;
+      if (resp == null) {
+        return;
+      } else {
+        var output = [];
+        if (resp.rows) {
+          console.log(resp);
+          if (resp.rows.length > 0) {
+            usuario = true;
+          }
+        }
+      }
+
+      if (!usuario) {
         this.navCtrl.setRoot(LoginPage);
         this.navCtrl.popToRoot();
-        console.log(null);
-        return;
       }
-      console.log(user);
     });
-    console.log(this.loginProvider.user)
   }
 }
