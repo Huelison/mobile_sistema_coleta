@@ -1,3 +1,4 @@
+import { SplashScreen } from '@ionic-native/splash-screen';
 import { LoginPage } from './../login/login';
 import { LoginProvider } from './../../providers/login/login';
 import { RotaProvider } from './../../providers/rota/rota';
@@ -5,7 +6,7 @@ import { RotaClienteProvider } from './../../providers/rota-cliente/rota-cliente
 import { ColetaProvider } from './../../providers/coleta/coleta';
 import { SqlLiteProvider } from './../../providers/sql-lite/sql-lite';
 import { Component } from '@angular/core';
-import { NavController, LoadingController, ToastController, AlertController } from 'ionic-angular';
+import { NavController, LoadingController, ToastController, AlertController, NavParams } from 'ionic-angular';
 
 export class iRota {
   public cliente: number;
@@ -29,18 +30,20 @@ export class HomePage {
   public total: number;
   listaRotas: any;
 
-  constructor(public navCtrl: NavController, public providerColeta: ColetaProvider, public banco: SqlLiteProvider,
-    public loadingCtrl: LoadingController, public toastCtrl: ToastController, public providerRotaCliente: RotaClienteProvider,
-    public providerRota: RotaProvider, public loginProvider: LoginProvider, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public toastCtrl: ToastController,
+    public banco: SqlLiteProvider, public loadingCtrl: LoadingController, public loginProvider: LoginProvider,
+    public providerColeta: ColetaProvider, public providerRotaCliente: RotaClienteProvider,
+    public providerRota: RotaProvider ) {
+    //  console.log(navParams.data);
     this.banco.abrirBanco(true);
-    //this.carregarColetas();
-    this.getLogado();
   }
+
   ionViewDidLoad() {
 
   }
 
   ionViewDidEnter() {
+    //this.getLogado();
     this.carregarColetas();
   }
 
@@ -139,7 +142,6 @@ export class HomePage {
             this.load = this.loadingCtrl.create({
               content: 'Aguarde, Finalizando Coleta...',
             });
-            alert.present();
 
             this.load.present();
             this.providerColeta.finalizarColeta(this.coleta)
@@ -178,6 +180,7 @@ export class HomePage {
         }
       ]
     });
+    alert.present();
   }
 
   exibirClientes(rota) {
@@ -325,24 +328,31 @@ export class HomePage {
   }
 
   getLogado() {
-    this.loginProvider.getUsuario().then((resp) => {
-      let usuario: boolean = false;
-      if (resp == null) {
-        return;
-      } else {
-        var output = [];
-        if (resp.rows) {
-          console.log(resp);
-          if (resp.rows.length > 0) {
-            usuario = true;
-          }
-        }
-      }
-
-      if (!usuario) {
-        this.navCtrl.setRoot(LoginPage);
-        this.navCtrl.popToRoot();
-      }
-    });
+    console.log('aqui');
+    /*   this.loginProvider.getUsuario().then((resp) => {
+         let usuario: boolean = false;
+         if (resp == null) {
+           return;
+         } else {
+           var output = [];
+           if (resp.rows) {
+             console.log(resp);
+             if (resp.rows.length > 0) {
+               usuario = true;
+             }
+           }
+         }
+         if (!this.hideSplash) {
+           this.splashScreen.hide();
+           this.hideSplash = true;
+         }
+         if (!usuario) {
+           this.loginProvider.signOut();
+           this.navCtrl.setRoot(LoginPage);
+           this.navCtrl.popToRoot();
+         } else {
+           this.carregarColetas();
+         }
+       });*/
   }
 }

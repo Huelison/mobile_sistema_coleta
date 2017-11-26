@@ -141,10 +141,10 @@ export class SqlLiteProvider {
       });
 
       this.banco.executeSql('create table IF NOT EXISTS usuarios( ' +
-      ' uID string not null ' +
+      ' uID string not null, ' +
       ' email string,' +
       ' nome string, ' +
-      ' caminhao integer ' +
+      ' caminhao integer, ' +
       ' primary key(uID))', {})
       .then(() => console.log('Tabela usuarios criada com sucesso!'))
       .catch(e => {
@@ -160,7 +160,7 @@ export class SqlLiteProvider {
       });
 
       this.banco.executeSql('create table IF NOT EXISTS caminhoes( ' +
-        ' id integer not null ' +
+        ' id integer not null, ' +
         ' placa string, ' +
         ' primary key(id))', {})
         .then(() => console.log('Tabela caminhoes criada com sucesso!'))

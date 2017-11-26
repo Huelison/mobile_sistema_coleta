@@ -12,7 +12,8 @@ export class LoginProvider {
   user: Observable<firebase.User>;
 
   constructor(public afAuth: AngularFireAuth, public toastCtrl: ToastController, public banco: SqlLiteProvider,
-    public afDB: AngularFireDatabase,  public caminhaoProvider: CaminhaoProvider) {
+    public afDB: AngularFireDatabase, public caminhaoProvider: CaminhaoProvider) {
+
     this.user = afAuth.authState;
     this.banco.abrirBanco(false);
   }
@@ -22,7 +23,6 @@ export class LoginProvider {
       .then(res => {
         console.log(res.uid);
         var uid = res.uid;
-
         this.inserirUsuario(uid);
       })
       .catch(err => {
@@ -38,38 +38,65 @@ export class LoginProvider {
       });
   }
 
-  signOut() {
-    this.afAuth.auth.signOut()
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
+  signOut(showLogout: boolean = false) {
+    return this.afAuth.auth.signOut()
+      .then(res => {
+        this.excluirUsuario().then((dt) => {
+          if (showLogout) {
+            let toast = this.toastCtrl.create({
+              message: 'Usuário desconectado com sucesso.',
+              duration: 5200,
+              position: 'bottom',
+              showCloseButton: true,
+              closeButtonText: 'OK'
+            });
+            toast.present();
+          }
+        })
+          .catch(e => {
+            let toast = this.toastCtrl.create({
+              message: 'Ocorreu um erro ao desconectar usuário.' + '' + e.message,
+              duration: 5200,
+              position: 'bottom',
+              showCloseButton: true,
+              closeButtonText: 'OK'
+            });
+            toast.present();
+            console.log(e)
+          });
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err);
+        let toast = this.toastCtrl.create({
+          message: 'Ocorreu um erro ao desconectar usuário.' + '' + err.message,
+          duration: 5200,
+          position: 'bottom',
+          showCloseButton: true,
+          closeButtonText: 'OK'
+        });
+        toast.present();
+      });
   }
 
   inserirUsuario(uID) {
-    this.afDB.list('/usuarios/' + uID).subscribe(dados => {
-      if (dados.length > 0) {
-        dados.forEach(data => {
-          this.excluirUsuario().then((dt) => {
-            this.caminhaoProvider.inserirCaminhao(data.caminhao);
-            let query = "INSERT or replace INTO usuarios(uID, email, nome, caminhao) " +
-              " VALUES (?,?,?,?)";
-            this.banco.banco.executeSql(query, [data.uID, data.email, data.nome, data.caminhao])
-              .then((data) => {
-              })
-              .catch(e => {
-                let toast = this.toastCtrl.create({
-                  message: 'Ocorreu um erro ao inserir o usuário.',
-                  duration: 5200,
-                  position: 'bottom',
-                  showCloseButton: true,
-                  closeButtonText: 'OK'
-                });
-                toast.present();
-                console.log(e)
-              });
-          })
+    this.afDB.object('/usuarios/' + uID).subscribe(data => {
+      if (data != null) {
+
+        this.excluirUsuario().then((dt) => {
+          console.debug('===============================================');
+          console.warn(data);
+          console.debug('===============================================');
+          //this.caminhaoProvider.inserirCaminhao(data.caminhao);
+          let query = "INSERT or replace INTO usuarios(uID, email, nome, caminhao) " +
+            " VALUES (?,?,?,?)";
+          return this.banco.banco.executeSql(query, [data.uID, data.email, data.nome, data.caminhao])
+            .then((data) => {
+
+            })
             .catch(e => {
               let toast = this.toastCtrl.create({
-                message: 'Ocorreu um erro ao inserir o usuário.',
+                message: 'Ocorreu um erro ao inserir o usuário.' + '' + e.message,
                 duration: 5200,
                 position: 'bottom',
                 showCloseButton: true,
@@ -78,7 +105,19 @@ export class LoginProvider {
               toast.present();
               console.log(e)
             });
-        });
+        })
+          .catch(e => {
+            let toast = this.toastCtrl.create({
+              message: 'Ocorreu um erro ao inserir o usuário.' + '' + e.message,
+              duration: 5200,
+              position: 'bottom',
+              showCloseButton: true,
+              closeButtonText: 'OK'
+            });
+            toast.present();
+            console.log(e)
+          });
+
       }
     }, err => {
       let toast = this.toastCtrl.create({
@@ -98,7 +137,7 @@ export class LoginProvider {
     return this.banco.banco.executeSql(query, []);
   }
 
-  getUsuario(){
-    return this.banco.banco.executeSql('Select * from usuarios ',{});
-  }  
+  getUsuario() {
+    return this.banco.banco.executeSql('Select * from usuarios ', {});
+  }
 }

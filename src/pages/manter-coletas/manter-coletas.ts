@@ -1,6 +1,6 @@
 import { ColetaProvider } from './../../providers/coleta/coleta';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular'; 
+import { IonicPage, NavController, NavParams, LoadingController, ToastController, AlertController } from 'ionic-angular';
 import * as moment_timezone from 'moment-timezone';
 
 /**
@@ -29,12 +29,12 @@ export class ManterColetasPage {
   public cliente: any;
   public coleta: any;
   public load: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
-    public providerColeta: ColetaProvider, public toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController,
+    public providerColeta: ColetaProvider, public toastCtrl: ToastController, public alertCtrl: AlertController) {
     this.cliente = navParams.data.clienteID;
     this.coleta = navParams.data.coletaID;
     console.log(navParams.data);
-    
+
     this.data = new iColeta();
     this.carregarColetaCliente();
   }
@@ -44,28 +44,31 @@ export class ManterColetasPage {
   }
 
   salvarColeta() {
-    this.load = this.loadingCtrl.create({
-      content: 'Aguarde, Salvando Coleta...',
-    });
-    this.load.present();
-    //validaçoes
-    this.providerColeta.salvarColetaCliente(this.data)
-      .then((data) => {
-        this.load.dismiss();
-        console.log('elemento atualizado com sucesso');
-        console.log(data);
-      }).catch(Error => {
-        this.load.dismiss();    
-        let toast = this.toastCtrl.create({
-          message: 'Ocorreu um erro ao salvar coleta.',
-          duration: 5200,
-          position: 'bottom',
-          showCloseButton:true,
-          closeButtonText:'OK'
-        });        
-        toast.present();  
-        console.error(Error)
+    if (this.validarDados()) {
+      this.load = this.loadingCtrl.create({
+        content: 'Aguarde, Salvando Coleta...',
       });
+      this.load.present();
+      //validaçoes
+      this.providerColeta.salvarColetaCliente(this.data)
+        .then((data) => {
+          this.load.dismiss();
+          console.log('elemento atualizado com sucesso');
+          console.log(data);
+          this.navCtrl.pop();
+        }).catch(Error => {
+          this.load.dismiss();
+          let toast = this.toastCtrl.create({
+            message: 'Ocorreu um erro ao salvar coleta.',
+            duration: 5200,
+            position: 'bottom',
+            showCloseButton: true,
+            closeButtonText: 'OK'
+          });
+          toast.present();
+          console.error(Error)
+        });
+    }
   }
 
   carregarColetaCliente() {
@@ -92,9 +95,9 @@ export class ManterColetasPage {
           this.data.cliente = output.cliente;
           this.data.cliente_nome = output.nome;
           this.data.coleta = output.coleta;
-          if (output.hora==null){                
+          if (output.hora == null) {
             this.data.hora = moment_timezone.tz('America/Sao_Paulo').format('HH:mm');
-          }            
+          }
           else
             this.data.hora = output.hora
 
@@ -111,15 +114,52 @@ export class ManterColetasPage {
           message: 'Ocorreu um erro ao recuperar dados da coleta selecionada.',
           duration: 5200,
           position: 'bottom',
-          showCloseButton:true,
-          closeButtonText:'OK'
-        });        
-        toast.present();  
+          showCloseButton: true,
+          closeButtonText: 'OK'
+        });
+        toast.present();
         console.error(Error)
       });
   }
 
-  cancelarColeta(){
+  cancelarColeta() {
     this.navCtrl.pop();
+  }
+
+  validarDados() {
+    var erros = "";// = "";
+
+    if ((this.data.quantidade < 0) || (this.data.quantidade.toPrecision == null))
+      erros += "\nA Quantidade deve ser maior que zero.";
+
+    if ((this.data.hora == '') || (this.data.hora == null))
+      erros += "\nA Hora de coleta deve ser informada.";
+
+    if (this.data.temperatura.toPrecision == null)
+      erros += "\nA temperatura deve ser informada.";
+
+    console.log(erros);
+    console.log(this.data.quantidade.toPrecision);
+
+    if (erros == "") {
+      return true;
+    } else {
+      let alert = this.alertCtrl.create({
+        title: 'Ocorreram erros na validação dos dados. ',
+        message: erros,
+        buttons: [
+          {
+            text: 'OK',
+            role: 'cancel',
+            handler: () => {
+
+            }
+
+          }
+        ]
+      });
+      alert.present();
+      return false;
+    }
   }
 }
