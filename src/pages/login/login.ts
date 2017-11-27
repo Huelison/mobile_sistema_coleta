@@ -16,6 +16,8 @@ export class LoginPage {
   public hideSplash: boolean;//está fechado o splash
   public sair: boolean;//controla se a função requisitada vem do sair
   public importarDados: boolean;//controla se a função requisitada vem da tela de importar
+  public logado: boolean;
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public loginProvider: LoginProvider,
     public splashScreen: SplashScreen) {
@@ -27,12 +29,13 @@ export class LoginPage {
     } else {
       this.sair = false;
     }
-
+    console.log(navParams.get('importarDados'));
     if (navParams.get('importarDados') == 'true') {
       this.importarDados = true;
     } else {
       this.importarDados = false;
     }
+    this.logado = false;
   }
 
   ionViewDidEnter() {
@@ -60,18 +63,29 @@ export class LoginPage {
       }
 
       if (!usuario || this.sair || this.importarDados) {
-        if (!this.importarDados)
+        if (!this.importarDados) {
           this.loginProvider.signOut();
+          console.log('passou aqui');
+        }
 
+        this.loginProvider.user = this.loginProvider.afAuth.authState;
         this.loginProvider.user.subscribe(user => {
-          if (!user) {
-            this.navCtrl.popToRoot();
-            return;
-          } else {
-            this.loginProvider.inserirUsuario(user.uid);
-            this.navCtrl.setRoot(HomePage);
-            if(this.importarDados)
-              this.navCtrl.push('ImportaDadosPage');
+          if (!this.logado) {
+            if (!user) {
+              if (!this.importarDados)
+                this.navCtrl.popToRoot();
+              return;
+            } else {
+              this.logado = true;
+              this.loginProvider.inserirUsuario(user.uid);
+              this.loginProvider.user = null;
+              if (this.importarDados) {
+                this.navCtrl.setRoot(HomePage, { importarDados: 'true' });
+                this.navCtrl.push('ImportaDadosPage');
+              } else {
+                this.navCtrl.setRoot(HomePage);
+              }
+            }
           }
         });
       } else {

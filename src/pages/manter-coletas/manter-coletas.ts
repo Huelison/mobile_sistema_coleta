@@ -129,17 +129,17 @@ export class ManterColetasPage {
   validarDados() {
     var erros = "";// = "";
 
-    if ((this.data.quantidade < 0) || (this.data.quantidade.toPrecision == null))
-      erros += "\nA Quantidade deve ser maior que zero.";
+    if ((this.data.quantidade < 0) || (this.data.quantidade+"" == ""))
+      erros += "<br>A Quantidade deve ser maior que zero.";
 
-    if ((this.data.hora == '') || (this.data.hora == null))
-      erros += "\nA Hora de coleta deve ser informada.";
+    if ((this.data.hora == "") || (this.data.hora == null))
+      erros += "<br>A Hora de coleta deve ser informada.";
 
-    if (this.data.temperatura.toPrecision == null)
-      erros += "\nA temperatura deve ser informada.";
+    if ((this.data.temperatura+"" == "") || (this.data.temperatura+"" == "null"))
+      erros += "<br>A temperatura deve ser informada.";
 
     console.log(erros);
-    console.log(this.data.quantidade.toPrecision);
+    console.log(this.data.temperatura+"");
 
     if (erros == "") {
       return true;

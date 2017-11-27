@@ -20,31 +20,17 @@ export class CaminhaoProvider {
   }
 
   inserirCaminhao(id) {
-    this.afDB.list('/caminhoes/-key' + id).subscribe(dados => {
-      if (dados.length > 0) {
-        dados.forEach(data => {
-          this.excluirCaminhao().then((dt) => {
-
-            let query = "INSERT or replace INTO caminhoes(id, placa) " +
-              " VALUES (?,?)";
-            this.banco.banco.executeSql(query, [data.id, data.placa])
-              .then((data) => {
-              })
-              .catch(e => {
-                let toast = this.toastCtrl.create({
-                  message: 'Ocorreu um erro ao inserir caminhão.',
-                  duration: 5200,
-                  position: 'bottom',
-                  showCloseButton: true,
-                  closeButtonText: 'OK'
-                });
-                toast.present();
-                console.log(e)
-              });
-          })
+    this.afDB.object('/caminhoes/-key' + id).subscribe(dados => {
+      if (dados != null) {
+        this.excluirCaminhao().then((dt) => {
+          let query = "INSERT or replace INTO caminhoes(id, placa) " +
+            " VALUES (?,?)";
+          this.banco.banco.executeSql(query, [dados.id, dados.placa])
+            .then((data) => {
+            })
             .catch(e => {
               let toast = this.toastCtrl.create({
-                message: 'Ocorreu um erro ao inserir o caminhão.',
+                message: 'Ocorreu um erro ao inserir caminhão.',
                 duration: 5200,
                 position: 'bottom',
                 showCloseButton: true,
@@ -53,7 +39,18 @@ export class CaminhaoProvider {
               toast.present();
               console.log(e)
             });
-        });
+        })
+          .catch(e => {
+            let toast = this.toastCtrl.create({
+              message: 'Ocorreu um erro ao inserir o caminhão.',
+              duration: 5200,
+              position: 'bottom',
+              showCloseButton: true,
+              closeButtonText: 'OK'
+            });
+            toast.present();
+            console.log(e)
+          });
       }
     }, err => {
       let toast = this.toastCtrl.create({

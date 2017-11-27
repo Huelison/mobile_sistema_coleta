@@ -1,4 +1,3 @@
-import { SqlLiteProvider } from './../providers/sql-lite/sql-lite';
 import { LoginProvider } from './../providers/login/login';
 import { LoginPage } from './../pages/login/login';
 import { Component, ViewChild } from '@angular/core';
@@ -36,8 +35,8 @@ export class MyApp {
       case 'ImportaDados':
         //aqui faz login
         this.menuCtrl.close();
-        this.loginProvider.signOut().then(res => {
-          this.nav.setRoot(LoginPage, { importarDados: 'true' });
+        this.loginProvider.signOut(false, true).then(res => {
+          this.nav.push(LoginPage, { importarDados: 'true' });
         });
         //        this.nav.push('ImportaDadosPage');
         break;

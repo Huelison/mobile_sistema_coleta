@@ -37,23 +37,25 @@ export class LoginProvider {
         console.log(err)
       });
   }
-
-  signOut(showLogout: boolean = false) {
+  //onlylLogout é usado para não excluir o usuario
+  signOut(showLogout: boolean = false, onlyLogout: boolean = false) {
+    console.log(onlyLogout);
     return this.afAuth.auth.signOut()
       .then(res => {
-        this.excluirUsuario().then((dt) => {
-          if (showLogout) {
-            let toast = this.toastCtrl.create({
-              message: 'Usuário desconectado com sucesso.',
-              duration: 5200,
-              position: 'bottom',
-              showCloseButton: true,
-              closeButtonText: 'OK'
-            });
-            toast.present();
-          }
-        })
-          .catch(e => {
+        if (!(onlyLogout)) {
+          console.log('logout completo');
+          this.excluirUsuario().then((dt) => {
+            if (showLogout) {
+              let toast = this.toastCtrl.create({
+                message: 'Usuário desconectado com sucesso.',
+                duration: 5200,
+                position: 'bottom',
+                showCloseButton: true,
+                closeButtonText: 'OK'
+              });
+              toast.present();
+            }
+          }).catch(e => {
             let toast = this.toastCtrl.create({
               message: 'Ocorreu um erro ao desconectar usuário.' + '' + e.message,
               duration: 5200,
@@ -64,9 +66,11 @@ export class LoginProvider {
             toast.present();
             console.log(e)
           });
+        }else{
+          console.log('somente logout');
+        }
         console.log(res)
-      })
-      .catch(err => {
+      }).catch(err => {
         console.log(err);
         let toast = this.toastCtrl.create({
           message: 'Ocorreu um erro ao desconectar usuário.' + '' + err.message,
@@ -87,12 +91,12 @@ export class LoginProvider {
           console.debug('===============================================');
           console.warn(data);
           console.debug('===============================================');
-          //this.caminhaoProvider.inserirCaminhao(data.caminhao);
+          this.caminhaoProvider.inserirCaminhao(data.caminhao);
           let query = "INSERT or replace INTO usuarios(uID, email, nome, caminhao) " +
             " VALUES (?,?,?,?)";
           return this.banco.banco.executeSql(query, [data.uID, data.email, data.nome, data.caminhao])
             .then((data) => {
-
+              this.signOut(false,true);
             })
             .catch(e => {
               let toast = this.toastCtrl.create({
@@ -130,6 +134,7 @@ export class LoginProvider {
       toast.present();
       console.log(err)
     });
+    
   }
 
   excluirUsuario() {

@@ -22,7 +22,7 @@ export class ColetaProvider {
   iniciarColeta(rotaID) {
     let query = "INSERT INTO coletas(rota, caminhao, data, sincronizado, finalizado) " +
       " VALUES (?,?,?,?,?)";
-    return this.banco.banco.executeSql(query, [rotaID, 1,moment_timezone.tz('America/Sao_Paulo').format('DD/MM/YYYY'), 'N', 'N']);
+    return this.banco.banco.executeSql(query, [rotaID, 1, moment_timezone.tz('America/Sao_Paulo').format('DD/MM/YYYY'), 'N', 'N']);
   }
 
   iniciarColetaCliente(data) {
@@ -68,13 +68,17 @@ export class ColetaProvider {
     return this.banco.banco.executeSql(query, []);
   }
 
-  consultaColetaCliente(idColeta, idCliente) {
-    var query = "Select cc.*, c.*, cl.*, rc.ordem as ordem from coletaCliente cc, coletas cl, clientes c, rotaCliente rc " +
-      " where (cl.id=cc.coleta) and (c.id=cc.cliente) and ((rc.rota = cl.rota) and (rc.cliente=cc.cliente)) ";
+  //a variavel hideOrdemNull é utilizada para evitar que coletas sem ordem correspondente sejam exibidas
+  consultaColetaCliente(idColeta, idCliente, hideOrdemNull: boolean = true) {
+    var query = "Select cc.*, c.*, cl.*, rc.ordem as ordem from coletaCliente cc, coletas cl, clientes c  " +
+      " left outer join  rotaCliente rc on ((rc.rota = cl.rota) and (rc.cliente=cc.cliente))" +
+      " where (cl.id=cc.coleta) and (c.id=cc.cliente) ";
     if (idColeta > 0)
       query += " and (cc.coleta = " + idColeta + ")";
     if (idCliente > 0)
       query += " and (cc.cliente = " + idCliente + ")";
+    if (hideOrdemNull)
+      query += " and ( rc.ordem is not null) ";
 
     query += " order by hora, ordem ";
     console.error(query);
@@ -91,7 +95,8 @@ export class ColetaProvider {
     let query = "update coletas set sincronizado='S'";
     return this.banco.banco.executeSql(query, []);
   }
-  validarColeta(idColeta){
+  
+  validarColeta(idColeta) {
 
   }
 }

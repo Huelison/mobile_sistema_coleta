@@ -1,5 +1,3 @@
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { LoginPage } from './../login/login';
 import { LoginProvider } from './../../providers/login/login';
 import { RotaProvider } from './../../providers/rota/rota';
 import { RotaClienteProvider } from './../../providers/rota-cliente/rota-cliente';
@@ -29,13 +27,18 @@ export class HomePage {
   public atual: number;
   public total: number;
   listaRotas: any;
+  public importarDados: boolean;//controla se a função requisitada vem da tela de importar
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController, public toastCtrl: ToastController,
     public banco: SqlLiteProvider, public loadingCtrl: LoadingController, public loginProvider: LoginProvider,
     public providerColeta: ColetaProvider, public providerRotaCliente: RotaClienteProvider,
-    public providerRota: RotaProvider ) {
-    //  console.log(navParams.data);
+    public providerRota: RotaProvider,public navParams: NavParams ) {
     this.banco.abrirBanco(true);
+    if (navParams.get('importarDados') == 'true') {
+      this.importarDados = true;
+    } else {
+      this.importarDados = false;
+    }
   }
 
   ionViewDidLoad() {
@@ -43,8 +46,14 @@ export class HomePage {
   }
 
   ionViewDidEnter() {
-    //this.getLogado();
-    this.carregarColetas();
+    if (!this.importarDados){
+      console.log('aqui1');
+      this.carregarColetas();
+    }else{
+      console.log('aqui2');
+      this.importarDados = false;
+    }
+    
   }
 
   manterColeta(cliente: number) {
@@ -73,7 +82,7 @@ export class HomePage {
           if (resp.rows.length > 0) {
             coleta.push(resp.rows.item(0));
             this.coleta = coleta[0].id;
-            this.providerColeta.consultaColetaCliente(this.coleta, 0)
+            this.providerColeta.consultaColetaCliente(this.coleta, 0, true)
               .then(resp => {
                 if (resp == null) {
                   return;
@@ -86,6 +95,11 @@ export class HomePage {
                     for (var i = 0; i < resp.rows.length; i++) {
                       output.push(resp.rows.item(i));
                     }
+
+                  }else{
+                    this.load.dismiss();
+                    this.exibeColetas = false;
+                    this.carregarRotas();
                   }
                   console.log(output);
                 }
@@ -227,6 +241,7 @@ export class HomePage {
               dados.temperatura = null;
               dados.alizarol = null;
               console.log(dados.hora);
+              this.atual=1;
               this.providerColeta.iniciarColetaCliente(dados)
                 .then((data) => {
                   console.log('elemento inserido com sucesso');
@@ -325,34 +340,5 @@ export class HomePage {
         toast.present();
         console.error(Error)
       });
-  }
-
-  getLogado() {
-    console.log('aqui');
-    /*   this.loginProvider.getUsuario().then((resp) => {
-         let usuario: boolean = false;
-         if (resp == null) {
-           return;
-         } else {
-           var output = [];
-           if (resp.rows) {
-             console.log(resp);
-             if (resp.rows.length > 0) {
-               usuario = true;
-             }
-           }
-         }
-         if (!this.hideSplash) {
-           this.splashScreen.hide();
-           this.hideSplash = true;
-         }
-         if (!usuario) {
-           this.loginProvider.signOut();
-           this.navCtrl.setRoot(LoginPage);
-           this.navCtrl.popToRoot();
-         } else {
-           this.carregarColetas();
-         }
-       });*/
   }
 }
