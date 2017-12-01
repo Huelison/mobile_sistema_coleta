@@ -18,7 +18,8 @@ export class LoginProvider {
     this.banco.abrirBanco(false);
   }
 
-  signIn(email, senha) {
+  signIn(email:string, senha) {
+    email = email.trim();
     this.afAuth.auth.signInWithEmailAndPassword(email, senha)
       .then(res => {
         console.log(res.uid);
