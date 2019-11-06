@@ -18,7 +18,7 @@ export class RotaProvider {
   }
 
   getAllRotas(){
-    return this.banco.banco.executeSql('Select * from rotas ',{});
+    return this.banco.banco.executeSql('Select * from rotas ',[]);
   }
 
 }

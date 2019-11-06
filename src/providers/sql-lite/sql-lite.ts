@@ -50,7 +50,7 @@ export class SqlLiteProvider {
       ' endereco text,' +
       ' latitude text,' +
       ' longitude text, ' +
-      ' fone text )', {})
+      ' fone text )', [])
       .then(() => console.log('Tabela clientes criada com sucesso!'))
       .catch(e => {
         let toast = this.toastCtrl.create({
@@ -67,7 +67,7 @@ export class SqlLiteProvider {
     this.banco.executeSql('create table IF NOT EXISTS rotas( ' +
       ' id integer primary key,' +
       ' nome text,' +
-      ' caminhao_atual integer)', {})
+      ' caminhao_atual integer)', [])
       .then(() => console.log('Tabela rotas criada com sucesso!'))
       .catch(e => {
         let toast = this.toastCtrl.create({
@@ -85,7 +85,7 @@ export class SqlLiteProvider {
       ' ordem integer,' +
       ' rota integer not null ,' +
       ' cliente integer not null ,' +
-      ' primary key(cliente, rota))', {})
+      ' primary key(cliente, rota))', [])
       .then(() => console.log('Tabela rotacliente criada com sucesso!'))
       .catch(e => {
         let toast = this.toastCtrl.create({
@@ -105,7 +105,7 @@ export class SqlLiteProvider {
       ' caminhao integer not null,' +
       ' data string not null,' +
       ' finalizado string not null,' +
-      ' sincronizado string not null)', {})
+      ' sincronizado string not null)', [])
       .then(() => console.log('Tabela coleta criada com sucesso!'))
       .catch(e => {
         let toast = this.toastCtrl.create({
@@ -126,7 +126,7 @@ export class SqlLiteProvider {
       ' hora string ,' +
       ' temperatura double ,' +
       ' alizarol string, ' +
-      ' primary key(cliente, coleta))', {})
+      ' primary key(cliente, coleta))', [])
       .then(() => console.log('Tabela coletaCliente criada com sucesso!'))
       .catch(e => {
         let toast = this.toastCtrl.create({
@@ -145,7 +145,7 @@ export class SqlLiteProvider {
       ' email string,' +
       ' nome string, ' +
       ' caminhao integer, ' +
-      ' primary key(uID))', {})
+      ' primary key(uID))', [])
       .then(() => console.log('Tabela usuarios criada com sucesso!'))
       .catch(e => {
         let toast = this.toastCtrl.create({
@@ -162,7 +162,7 @@ export class SqlLiteProvider {
       this.banco.executeSql('create table IF NOT EXISTS caminhoes( ' +
         ' id integer not null, ' +
         ' placa string, ' +
-        ' primary key(id))', {})
+        ' primary key(id))', [])
         .then(() => console.log('Tabela caminhoes criada com sucesso!'))
         .catch(e => {
           let toast = this.toastCtrl.create({

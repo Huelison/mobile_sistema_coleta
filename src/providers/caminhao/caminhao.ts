@@ -1,4 +1,4 @@
-import { SqlLiteProvider } from './../sql-lite/sql-lite';
+﻿import { SqlLiteProvider } from './../sql-lite/sql-lite';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { AngularFireDatabase } from 'angularfire2/database';
@@ -71,6 +71,6 @@ export class CaminhaoProvider {
   }
 
   getCaminhao() {
-    return this.banco.banco.executeSql('Select * from caminhoes ', {});
+    return this.banco.banco.executeSql('Select * from caminhoes ', []);
   }
 }

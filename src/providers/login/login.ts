@@ -1,4 +1,4 @@
-import { CaminhaoProvider } from './../caminhao/caminhao';
+﻿import { CaminhaoProvider } from './../caminhao/caminhao';
 import { SqlLiteProvider } from './../sql-lite/sql-lite';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -144,6 +144,6 @@ export class LoginProvider {
   }
 
   getUsuario() {
-    return this.banco.banco.executeSql('Select * from usuarios ', {});
+    return this.banco.banco.executeSql('Select * from usuarios ', []);
   }
 }

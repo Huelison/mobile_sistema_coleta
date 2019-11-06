@@ -1,26 +1,10 @@
-This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
+#Coleta Leite
 
-## How to use this template
-
-*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/ionic-team/ionic2-app-base).
-
-To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/ionic-team/ionic2-app-base).
-
-### With the Ionic CLI:
-
-Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
-
-```bash
-$ sudo npm install -g ionic cordova
-$ ionic start myBlank blank
-```
-
-Then, to run it, cd into `myBlank` and run:
-
-```bash
-$ ionic cordova platform add ios
-$ ionic cordova run ios
-```
-
-Substitute ios for android if not on a Mac.
-
+Aplicativo desenvolvido em IONIC utilizado como estudo de caso de TCC. Sua principal funcionalidade é permitir o registro dos volumes de leite carregados de cada agricultor no momento da coleta. Ele é integrado com o sistema desktop Administrador.
+Utiliza o firebase como backend, possiblitando um intermédio entre a aplicação instalada na empresa e a instalada no celular do motorista.
+Tecnologias utilizadas: 
+- IONIC
+- Firebase RealTime Database
+- Firebase Functions
+- Firebase Authentication
+- SQLite
